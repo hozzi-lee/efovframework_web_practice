@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Dept">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="DeptVO" type="egovframework.example.sample.service.DeptVO"/>
+
+	<!-- resultMap 필요시 작성 -->
+	<resultMap id="resultDeptVO" class="DeptVO">
+		<result property="deptNo" column="dept_no" />
+		<result property="deptName" column="dept_name" />
+		<result property="deptLoca" column="dept_loca" />
+	</resultMap>
+	
+	<!-- 부서 등록 -->
+	<insert id="deptDAO.insertDept">
+	<![CDATA[
+		INSERT INTO dept
+		VALUES ( #deptNo#, #deptName#, #deptLoca# )
+	]]>
+	</insert>
+	
+	<!-- 부서 리스트 -->
+	<select id="deptDAO.deptList" resultClass="egovMap">
+	<![CDATA[
+		SELECT dept_no, dept_name, dept_loca
+		FROM dept
+		ORDER BY dept_no ASC
+	]]>
+	</select>
+	
+	<!-- 부서 상제 정보 -->
+	<select id="deptDAO.deptDetail" resultMap="resultDeptVO">
+	<![CDATA[
+		SELECT dept_no, dept_name, dept_loca
+		FROM dept
+		WHERE dept_no = #deptNo#
+	]]>
+	</select>
+	
+	<!-- 부서 삭제 -->
+	<delete id="deptDAO.deptDelete">
+	<![CDATA[
+		DELETE FROM dept
+		WHERE dept_no = #deptNo#
+	]]>
+	</delete>
+	
+	<!-- 부서 정보 수정 -->
+	<update id="deptDAO.deptUpdate">
+	<![CDATA[
+		UPDATE dept
+		SET dept_name = #deptName#, dept_loca = #deptLoca#
+		WHERE dept_no = #deptNo#
+	]]>
+	</update>
+	
+</sqlMap>

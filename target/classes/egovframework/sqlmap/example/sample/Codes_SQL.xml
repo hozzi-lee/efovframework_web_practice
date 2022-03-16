@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Codes">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="CodesVO" type="egovframework.example.sample.service.CodesVO"/>
+
+	<!-- resultMap -->
+	<resultMap id="resultCodesVO" class="CodesVO">
+		<result property="codeNo" column="code_no" />
+		<result property="gidNo" column="gid_no" />
+		<result property="codeName" column="code_name" />
+	</resultMap>
+	
+	<!-- 부서등록 -->
+	<insert id="codeWrite">
+	<![CDATA[
+		call EX_TEST( #gidNo#, #codeName# )
+	]]>
+	</insert>
+<!-- 	INSERT INTO codes -->
+<!-- 		VALUES ( seq_codes_no.NEXTVAL, #gidNo#, #codeName# ) -->
+	<!-- 코드 목록 -->
+	<select id="codeList" resultClass="egovMap">
+	<![CDATA[
+		SELECT code_no, DECODE( gid_no, 1, 'JOB', 2, 'HOBBY' ) gid_no, code_name
+		FROM codes
+		ORDER BY code_no ASC
+	]]>
+	</select>
+	
+	<!-- 코드 목록 개수 -->
+	<select id="codeListCount" resultClass="int">
+	<![CDATA[
+		SELECT COUNT(code_no) cnt
+		FROM codes
+	]]>
+	</select>
+	
+	<!-- 코드 삭제 -->
+	<delete id="codeDelete">
+	<![CDATA[
+		DELETE FROM codes
+		WHERE code_no = #codeNo#
+	]]>
+	</delete>
+	
+	<!-- 코드 세부 정보 -->
+	<select id="codeDetail" resultMap="resultCodesVO">
+	<![CDATA[
+		SELECT code_no, gid_no, code_name
+		FROM codes
+		WHERE code_no = #codeNo#
+	]]>
+	</select>
+	
+	<!-- 코드 수정 -->
+	<update id="codeUpdate">
+	<![CDATA[
+		UPDATE codes
+		SET code_name = #codeName#, gid_no = #gidNo#
+		WHERE code_no = #codeNo#
+	]]>
+	</update>
+
+</sqlMap>
